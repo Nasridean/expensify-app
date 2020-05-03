@@ -5,17 +5,17 @@ import configureStore from './store/configureStore';
 import AppRouter from './routers/AppRouter';
 import { addExpense, removeExpense } from './actions/expenses';
 import { setTextFilter } from './actions/filters';
-import getVisibleExpenses from './selectors/expenses'
+import getVisibleExpenses from './selectors/expenses';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
-
 
 const store = configureStore();
 store.dispatch(addExpense({description: 'Water bill', createdAt: 1000, amount: 100, note: 'Just a note' }));
 store.dispatch(addExpense({description: 'Gas bill', createdAt: 500, amount: 500, note: 'Just a note' }));
 store.dispatch(setTextFilter('bill'));
 const visibleExpenses =  getVisibleExpenses(store.getState().expenses, store.getState().filter);
+console.log('test');
 const jsx = (
     <Provider store = {store}>
         <AppRouter />
