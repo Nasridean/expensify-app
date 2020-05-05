@@ -1,0 +1,1 @@
+export default (expenses) => expenses.reduce((accumulator, currentValue) => accumulator + currentValue.amount, 0);
