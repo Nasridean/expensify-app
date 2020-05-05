@@ -9,7 +9,9 @@ exports[`should render an expense item with some expense data 1`] = `
     House
   </NavLink>
   <p>
-    100
+    $1.00
+     - 
+    01/01/1970
   </p>
 </div>
 `;
