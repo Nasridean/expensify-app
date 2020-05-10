@@ -1,4 +1,5 @@
 node_modules/
 public/dist/
+playground/
 .env.development
 .env.test
