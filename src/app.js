@@ -2,19 +2,18 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/configureStore';
-import AppRouter from './routers/AppRouter';
+import AppRouter, { history } from './routers/AppRouter';
 import { addExpense, removeExpense, startSetExpenses } from './actions/expenses';
-import { setTextFilter } from './actions/filters';
+import { login, logout } from './actions/auth';
 import getVisibleExpenses from './selectors/expenses';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
-import './firebase/firebase';
+import { firebase } from './firebase/firebase';
 
 const store = configureStore();
 store.dispatch(addExpense({description: 'Water bill', createdAt: 1000, amount: 100, note: 'Just a note' }));
 store.dispatch(addExpense({description: 'Gas bill', createdAt: 500, amount: 500, note: 'Just a note' }));
-store.dispatch(setTextFilter('bill'));
 const visibleExpenses =  getVisibleExpenses(store.getState().expenses, store.getState().filter);
 console.log('test');
 const jsx = (
@@ -22,10 +21,32 @@ const jsx = (
         <AppRouter />
     </Provider>
 )
-ReactDOM.render(<p>Loading...</p>, document.getElementById('app'));
-store.dispatch(startSetExpenses()).then(() => {
-    ReactDOM.render(jsx, document.getElementById('app'));
 
+let hasRendered = false;
+const renderApp = () => {
+    if (!hasRendered) {
+            ReactDOM.render(jsx, document.getElementById('app'));
+            hasRendered = true;
+    }
+};
+ReactDOM.render(<p>Loading...</p>, document.getElementById('app'));
+
+
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        store.dispatch(login(user.uid));
+        store.dispatch(startSetExpenses()).then(() => {
+            renderApp();
+            if (history.location.pathname === '/') {
+                history.push('/dashboard');
+            }
+        });
+    } else {
+        store.dispatch(logout());
+        renderApp();
+        history.push('/');
+    }
 })
 
 /* class Header extends React.Component {
