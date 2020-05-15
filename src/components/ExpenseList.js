@@ -6,10 +6,21 @@ import selectExpensesTotal from '../selectors/expenses-total';
 import numeral from 'numeral';
 
 const ExpenseList = (props) => (
-    <div>
-        <h1>Expense List</h1>
-        {props.expenses.map((expense) => <ExpenseListItem expense={expense} key={expense.id} />)}
-        <h4>Total of {props.expenses.length} {props.expenses.length > 1 ? 'expenses:' : 'expense:'} </h4>{numeral(selectExpensesTotal(props.expenses)/100).format('$0,0.00')}
+    <div className="content-container">
+        <div className="list-header">
+            <div className="show-for-mobile">Expenses</div>
+            <div className="show-for-desktop">Expense</div>
+            <div className="show-for-desktop">Amount</div>
+        </div>
+        <div className="list-body">
+            {props.expenses.length === 0 ? (
+                <div className="list-item list-item__message">
+                    <span>No expenses</span>
+                </div>
+            ) : (
+                props.expenses.map((expense) => <ExpenseListItem expense={expense} key={expense.id} />)
+                )}
+        </div>
     </div>
 );
 
